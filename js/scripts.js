@@ -37,8 +37,12 @@ function Clock(){
         active = false,  //keeps track of wheter clock is running or not 
         //Display Functions!
         _this = this, // Reference to the clock itself 
-        timer; //Reference to the interval we set up to make the timer run.
-         
+        timer, //Reference to the interval we set up to make the timer run.
+         startAudio = new Audio ("../assets/start.mp3")
+         endAudio = new Audio("../assets/end.mp3");
+
+    //Display Functions 
+    
     // Starting value for our timer
     //Function to convert number of seconds into formatted time string
     function formatTime(secs){
@@ -53,7 +57,7 @@ function Clock(){
             if (time < 10) {
                 return "0" + time;
                 
-            }else{
+            }else {
                 return time;
             }
         }
@@ -80,10 +84,10 @@ function Clock(){
         }
         //Set up the step class for the radial 
         $('.progress-radial').attr('class', function(index, currentValue) {
-            return currentValue.replace(/(^|\s)step-\S+/g, " step-" + (100 - parseInt
-                ((currentTime / startTime) * 100)));
+    return currentValue.replace(/(^|\s)step-\S+/g, " step-" + (100 - parseInt ((currentTime / startTime) * 100)));
 
-        });console.log ($('.progress-radial').attr('class'));
+        });
+        console.log ($('.progress-radial').attr('class'));
         
     }
 
@@ -112,7 +116,7 @@ function Clock(){
 
         } else if (mode === "Break"){
             //If we're in a  break, we should show the text break
-            $('.session-count').html("<h2>Break!</h2>")
+            $('.session-count').html("<h2>Break!</h2>");
         }
        
         //If we're in a break, we should show the text Break
@@ -161,6 +165,8 @@ this.toggleClock = function() {
         if(sessionCount === 0){
             sessionCount = 1;
             this.displaySessionCount();
+            startAudio.play();
+
         }
         $(".time-start").text("Pause");
         timer = setInterval(function() {
@@ -183,6 +189,7 @@ this.stepDown = function() {
                 currentTime = breakTime;
                 startTime = breakTime;
                 this.displaySessionCount();
+                endAudio.play();
 
             } else {
                 mode = "Session";
@@ -190,6 +197,7 @@ this.stepDown = function() {
                 startTime = sessionTime;
                 sessionCount++;
                 this.displaySessionCount();
+                startAudio.play();
             }
         }
     }

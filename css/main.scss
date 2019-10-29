@@ -1,26 +1,26 @@
-$background-gradient-start-color:rgba(51, 255, 211, 0.952);
-$background-gradient-end-color: rgb(51, 255, 102);
+$background-gradient-start-color:#030413;
+$background-gradient-end-color: #2630D1;
 
 $card-background-color: rgba(34, 33, 32, 0.8);
-$card-border-radius:4px;$card-box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.8), 0 25px 55px 0 rgba(0, 0, 0, 0.21);
+$card-border-radius:4px;
+$card-box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.8), 0 25px 55px 0 rgba(0, 0, 0, 0.21);
 
 $main-text-color: #DAFF33;
 
 $radial-session-color: #00A0B0;
 $radial-break-color: rgb(65, 110, 235);
 $radial-overlay-color: #EAE9E5;
-
+$radial-bg-color: #636361;
 html, body {
     box-sizing: border-box;
-    height: 100%;
-    width: 100%;
+    min-height: 100%;
+    
 }
 
 body {
-    background: linear-gradient(60deg, 
-    $background-gradient-start-color,
-    $background-gradient-end-color);
+    background: linear-gradient(60deg, $background-gradient-start-color, $background-gradient-end-color);
     padding-top:20px;
+    padding-bottom: 20px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -29,6 +29,7 @@ body {
         padding-top: 0;
 
     }
+}
 
     .clock {
         width: 220px;
@@ -37,8 +38,8 @@ body {
         margin: 0 auto;
         padding: 10px;
         background-color:$card-background-color;
-        box-shadow:$card-box-shadow;
-        border-radius:$card-border-radius;
+        box-shadow: $card-box-shadow;
+        border-radius: $card-border-radius;
 
         .progress-radial {
             display: inline-block;
@@ -47,7 +48,7 @@ body {
             width: 6em;
             padding-bottom: 6em;
             border-radius: 50%;
-            background-color: $radial-session-color;
+            background-color:$radial-session-color;
 
             .overlay {
                 position: absolute;
@@ -64,8 +65,8 @@ body {
                 color: $radial-session-color;
             }
 
-            &.session .overlay {
-                color:$radial-break-color;
+            &.break .overlay {
+                color: $radial-break-color;
             }
         }
 
@@ -98,7 +99,7 @@ body {
                 width: 30px;
                 transition: background-color 0.2s ease-in-out;
                 
-                &:hover, &:focus{
+                &:hover, &:focus {
                     background-color: rgba(130, 130, 130, 0.8);
                 }
             }
@@ -119,7 +120,7 @@ body {
         }
     }
 
-}
+
     .controls{
         padding-top:20px;
         padding-bottom:10px;
@@ -130,6 +131,7 @@ body {
             border-radius: 4px;
             color:$main-text-color;
             font-size: 0.9em;
+            height:40px;
             width: 70px;
             margin-left: 15px;
             margin-right: 15px;
@@ -140,3 +142,39 @@ body {
             }
         }
     }
+
+
+
+//Radial setup 
+
+$increment: 3.6; //This will be used to calculate the number of degrees the gradient should be angled by 
+
+//For loop in SASS
+@for $i from 0 through 100 {
+    //Making a CSS ruleset for  .step-0 all the way thru .step-100
+     .step-#{$i} {
+        //if statement in SASS 
+        @if $i <50 {
+            //Calculate angle of our gradient
+            $nextDeg: 90deg + ($increment * $i);
+            &.session {
+                background-image: linear-gradient(90deg, $radial-bg-color 50%, transparent 50%, transparent), linear-gradient($nextDeg, $radial-session-color 50%, $radial-bg-color 50%, $radial-bg-color);
+            }
+
+            &.break {
+                background-image: linear-gradient(90deg, $radial-bg-color 50%, transparent 50%, transparent), linear-gradient($nextDeg, $radial-break-color 50%, $radial-bg-color 50%, $radial-bg-color);
+
+            }
+            } @else {
+               $nextDeg: -90deg + ($increment * ($i - 50));
+        &.session {
+            background-image: linear-gradient($nextDeg, $radial-session-color 50%, transparent 50%, transparent), linear-gradient(270deg, $radial-session-color 50%, $radial-bg-color 50%, $radial-bg-color);
+        }
+        &.break {
+            background-image: linear-gradient($nextDeg, $radial-break-color 50%, transparent 50%, transparent) linear-gradient(270deg, $radial-break-color 50%, $radial-bg-color 50%, $radial-bg-color);
+
+        }
+
+    } 
+    }
+}
